@@ -1,0 +1,343 @@
+/* ---------- 3D cinematic intro ---------- */
+.intro3d {
+  --exit: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: #0c3d2c;
+  opacity: calc(1 - var(--exit));
+}
+.intro3d__bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background:
+    radial-gradient(
+      ellipse 80% 70% at 50% 45%,
+      rgba(46, 150, 108, 0.55),
+      transparent 75%
+    ),
+    linear-gradient(180deg, #0f4a36, #0c3d2c 55%, #093123);
+}
+.intro3d__rays {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 220vmax;
+  height: 220vmax;
+  margin: -110vmax 0 0 -110vmax;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(227, 200, 138, 0.05) 0deg 4deg,
+    transparent 4deg 15deg
+  );
+  -webkit-mask: radial-gradient(circle, #000 0%, transparent 45%);
+  mask: radial-gradient(circle, #000 0%, transparent 45%);
+  animation: spin 60s linear infinite;
+  opacity: 0;
+  display: none;
+}
+.intro3d__canvas {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.intro3d__vignette {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 70%,
+    rgba(0, 0, 0, 0.18) 100%
+  );
+}
+.intro3d__flash {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle at 50% 42%,
+    rgba(255, 236, 190, 0.95),
+    rgba(255, 210, 130, 0.25) 40%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+}
+.intro3d__kicker {
+  position: absolute;
+  top: clamp(18px, 4vh, 36px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  opacity: 0;
+}
+.intro3d.is-started .intro3d__kicker {
+  animation: rise 0.6s 0s forwards;
+}
+.intro3d__skip-unused {
+  position: absolute;
+  top: clamp(10px, 3vh, 26px);
+  right: clamp(10px, 3vw, 30px);
+  min-height: 40px;
+  padding: 0 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(227, 200, 138, 0.45);
+  background: #03140e66;
+  color: var(--gold-light);
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s;
+}
+.intro3d__skip:hover {
+  background: #e3c88a26;
+}
+.intro3d__word {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 62.5%;
+  transform: translateY(-50%);
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: min(clamp(1.5rem, 4.4vw, 3.6rem), calc(56vw / var(--len, 6)));
+  line-height: 1;
+  letter-spacing: 0.14em;
+  padding-left: 0.14em;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #fffaf0, #f3d996 45%, #b8873a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.35));
+  pointer-events: none;
+  opacity: 0;
+}
+.intro3d__word.is-out {
+  visibility: visible !important; /* stay on screen while the letters drift away */
+}
+.intro3d__word.is-out .wl {
+  display: inline-block;
+  animation: letterAway 1.8s cubic-bezier(0.25, 0.1, 0.25, 1) var(--d, 0s) both;
+}
+@keyframes letterAway {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+    filter: blur(0);
+  }
+  35% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.7);
+    filter: blur(6px);
+  }
+}
+.intro3d__word.is-in {
+  animation: wordSlam 0.85s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+.intro3d[data-phase="emblem"] .intro3d__word,
+.intro3d[data-phase="exit"] .intro3d__word {
+  visibility: hidden;
+}
+@keyframes wordSlam {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) scale(1.9);
+    filter: blur(10px);
+  }
+  12% {
+    opacity: 1;
+    transform: translateY(-50%) scale(0.94);
+    filter: blur(0);
+  }
+  18% {
+    transform: translateY(-50%) scale(1.03);
+  }
+  24%,
+  72% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-50%) scale(1.06);
+    letter-spacing: 0.3em;
+    filter: blur(5px);
+  }
+}
+.intro3d--fallback .intro3d__fallback-logo {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: min(300px, 60vw);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  animation: zoomIn 1.2s both;
+}
+.intro3d {
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+@media (max-aspect-ratio: 4/5) {
+  .intro3d__word {
+    top: 61%;
+    font-size: min(clamp(1.3rem, 7.5vw, 2.2rem), calc(78vw / var(--len, 6)));
+    letter-spacing: 0.2em;
+  }
+}
+
+/* ---------- ACT 4: "THIS TIME / BIGGER & BETTER!" ----------
+   each word rockets from deep behind the screen to the front and SLAMS down
+   (squash + gold shockwave), like the mascot hitting the ground */
+.intro3d__tagline {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: min(2.4vh, 1.4rem);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  line-height: 1;
+  text-align: center;
+  pointer-events: none;
+  visibility: hidden;
+}
+.intro3d[data-phase='tagline'] .intro3d__tagline,
+.intro3d[data-phase='exit'] .intro3d__tagline {
+  visibility: visible;
+}
+.tl-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+.intro3d__tagline {
+  /* one size for both lines: THIS TIME = BIGGER & BETTER! */
+  --tl-fs: min(9.4vw, 15vh, 10.5rem);
+}
+.tl-row--top,
+.tl-row--bottom {
+  font-size: var(--tl-fs);
+  letter-spacing: 0.03em;
+}
+.tl-row--top {
+  gap: 0.3em;
+}
+.tl-row--bottom {
+  gap: 0.26em;
+}
+.intro3d__tagline .tl {
+  position: relative;
+  display: inline-block;
+  opacity: 0;
+  background: linear-gradient(180deg, #fffaf0 0%, #f3d996 45%, #b8873a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* raised gold edge: chained 1px drop-shadows (text-shadow would cover the gradient) */
+  --depth: drop-shadow(0 1px 0 #a87a32) drop-shadow(0 1px 0 #8b6024) drop-shadow(0 1px 0 #7b531e)
+    drop-shadow(0 1px 0 #6a4718) drop-shadow(0 1px 0 #5a3b13) drop-shadow(0 8px 10px rgba(0, 0, 0, 0.5));
+  filter: var(--depth);
+  transform-origin: 50% 100%;
+  will-change: transform, opacity;
+}
+.intro3d__tagline .tl--amp {
+  /* & flies in from the back exactly like BIGGER and BETTER! */
+  background: linear-gradient(180deg, #ffe7a8 0%, #e7a83b 60%, #b56d1e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.intro3d__tagline .tl.is-in {
+  animation: tlSlam 0.62s cubic-bezier(0.6, 0, 0.9, 0.5) both;
+}
+@keyframes tlSlam {
+  /* flies straight at the viewer from far behind, speeding up… */
+  0% {
+    opacity: 0;
+    transform: perspective(700px) translateZ(-5000px);
+    filter: var(--depth) blur(3px);
+  }
+  15% {
+    opacity: 1;
+  }
+  70% {
+    /* …COLLIDES with the screen and stops dead */
+    transform: perspective(700px) translateZ(60px);
+    filter: var(--depth) brightness(1.7) blur(0);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+  80% {
+    /* tiny recoil off the glass */
+    transform: perspective(700px) translateZ(-25px);
+    filter: var(--depth) brightness(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(700px) translateZ(0);
+    filter: var(--depth);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro3d__tagline .tl.is-in {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* phones (portrait): bigger tagline — THIS TIME on top, then BIGGER / & / BETTER! stacked */
+@media (max-aspect-ratio: 4/5) {
+  .intro3d__tagline {
+    --tl-fs: min(14vw, 8.5vh);
+    gap: min(1.4vh, 0.7rem);
+  }
+  .tl-row--top {
+    margin-bottom: min(1.2vh, 0.6rem);
+  }
+  .tl-row--bottom {
+    flex-direction: column;
+    gap: min(1.2vh, 0.6rem);
+    font-size: calc(var(--tl-fs) * 1.18);
+  }
+  .tl-row--bottom .tl--amp {
+    font-size: 0.7em;
+  }
+}
