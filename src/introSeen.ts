@@ -1,35 +1,5 @@
-/* sessionStorage lives per browser tab: it survives a refresh but a new tab starts empty */
-const KEY = 'surabhi-intro-seen';
-
-function readSeen(): boolean {
-  try {
-    return sessionStorage.getItem(KEY) === '1';
-  } catch {
-    return false;
-  }
-}
-
-function writeSeen(): void {
-  try {
-    sessionStorage.setItem(KEY, '1');
-  } catch {
-    /* private mode etc. – intro will just play again */
-  }
-}
-
-/* Decided once, when the page loads. The tab is marked as "seen" the moment the
-   intro STARTS, so refreshing in the middle of the intro (or right after it)
-   opens Home directly instead of replaying it. */
-export const shouldPlayIntro: boolean =
-  !new URLSearchParams(window.location.search).has('nointro') && !readSeen();
-
-if (shouldPlayIntro) {
-  // Chrome can prerender the page while the URL is still being typed; only mark the
-  // tab once the page is actually opened.
-  const doc = document as Document & { prerendering?: boolean };
-  if (doc.prerendering) document.addEventListener('prerenderingchange', writeSeen, { once: true });
-  else writeSeen();
-}
+/* The intro plays on every page load, including a refresh. Add ?nointro to the URL to skip it. */
+export const shouldPlayIntro: boolean = !new URLSearchParams(window.location.search).has('nointro');
 
 /* Resolves when the page is really on screen: not prerendered and not a hidden tab. */
 export function whenPageVisible(): Promise<void> {
@@ -52,5 +22,6 @@ export function introSeen(): boolean {
 }
 
 export function markIntroSeen(): void {
-  writeSeen();
+  /* nothing to remember: the intro replays on every load */
 }
+

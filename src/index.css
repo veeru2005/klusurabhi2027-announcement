@@ -3003,8 +3003,12 @@ main {
 html,
 body {
   height: 100%;
-  overflow: hidden;
-  overscroll-behavior: none;
+  overflow-x: hidden;
+  /* the page itself never scrolls (it is exactly one screen), but the root must stay a
+     scroller with normal overscroll, or mobile browsers disable pull-to-refresh */
+  overflow-y: auto;
+  overscroll-behavior-x: none;
+  overscroll-behavior-y: auto;
 }
 html {
   scroll-behavior: auto;
