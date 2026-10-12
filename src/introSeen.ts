@@ -24,4 +24,3 @@ export function introSeen(): boolean {
 export function markIntroSeen(): void {
   /* nothing to remember: the intro replays on every load */
 }
-
