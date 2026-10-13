@@ -2936,10 +2936,11 @@ main {
   color: var(--gold-light);
 }
 
-/* phones: everything under the KL | KLH badge sits a little lower (badge stays put) */
+/* phones: the KL | KLH badge is gone, so the content block sits higher on the screen
+   (the bottom credit line is absolutely positioned and does not move) */
 @media (max-width: 600px) {
   .app--single .hero {
-    padding-top: 104px;
+    padding-top: 54px;
   }
 }
 
