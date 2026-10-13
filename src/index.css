@@ -2940,7 +2940,7 @@ main {
    (the bottom credit line is absolutely positioned and does not move) */
 @media (max-width: 600px) {
   .app--single .hero {
-    padding-top: 54px;
+    padding-top: 74px;
   }
 }
 
