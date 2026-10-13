@@ -56,7 +56,7 @@ export const CARDS: { logo: string; shape: CardShape; plate?: string; fill?: boo
   { logo: '/cards/natyaka.webp', shape: 'circle', backdrop: true, plate: '#3a0c10', plateRim: '#1a0407', label: 'Natyaka', tint: '#94652f', word: true },
   { logo: '/cards/sahitya.webp', shape: 'circle', plate: '#000000', zoom: 1.65, label: 'Sahitya', tint: '#8a2f3c', word: true },
   { logo: '/cards/raaga.webp', shape: 'circle', plate: '#ffffff', label: 'Raaga', tint: '#d9893a', word: true },
-  { logo: '/cards/chitrakala.webp', shape: 'circle', fill: true, label: 'Chitrakala', tint: '#3e78c9', word: true },
+  { logo: '/cards/chitrakala.webp?v=2', shape: 'circle', fill: true, label: 'Chitrakala', tint: '#3e78c9', word: true },
   { logo: '/cards/kurukshetra.webp', shape: 'circle', fill: true, label: 'Kurukshetra', tint: '#c25226', word: true },
 ];
 export const WORDS = CARDS.filter((c) => c.word).map((c) => c.label);
