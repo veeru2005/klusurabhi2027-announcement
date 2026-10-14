@@ -48,6 +48,9 @@ export default function Home() {
       <section className="hero" ref={heroRef}>
         <div className="hero__mandala" ref={mandala} aria-hidden="true" />
         <Petals />
+        {/* corner logos: KL University top left, Surabhi symbol top right (Home only) */}
+        <img className="hero__corner hero__corner--kl anim-rise" src="/kl-university-logo.webp" alt="KL University" width="539" height="220" decoding="async" />
+        <img className="hero__corner hero__corner--symbol anim-rise" src="/surabhi-symbol-logo.webp" alt="Surabhi symbol" width="287" height="280" decoding="async" />
         <div className="container hero__grid" ref={gridRef}>
           <div className="hero__copy">
             <p className="hero__kicker hero__kicker--top anim-rise">KL University · KL SAC</p>

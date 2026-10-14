@@ -3042,3 +3042,48 @@ body {
     padding-bottom: 58px; /* two-row credit */
   }
 }
+
+/* corner logos on the Home hero: KL University (top left), Surabhi symbol (top right) */
+.hero__corner {
+  position: absolute;
+  top: clamp(14px, 2.4vh, 26px);
+  z-index: 6;
+  width: auto;
+  pointer-events: none;
+  user-select: none;
+}
+.hero__corner--kl {
+  left: 0;
+  height: clamp(50px, 6.4vh, 68px);
+  padding: 7px 1.3rem 7px clamp(0.7rem, 1.4vw, 1.1rem);
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 0 999px 999px 0;
+  box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.55);
+}
+.hero__corner--symbol {
+  right: clamp(14px, 2.2vw, 36px);
+  height: clamp(54px, 7.4vh, 80px);
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45));
+}
+.app--single .hero {
+  padding-top: clamp(84px, 11.5vh, 116px);
+}
+@media (max-width: 600px) {
+  .hero__corner {
+    top: 14px;
+  }
+  .hero__corner--kl {
+    left: 0;
+    height: 40px;
+    padding: 5px 0.85rem 5px 0.55rem;
+    border-radius: 0 999px 999px 0;
+  }
+  .hero__corner--symbol {
+    right: 12px;
+    height: 48px;
+  }
+  .app--single .hero {
+    padding-top: 74px;
+  }
+}
