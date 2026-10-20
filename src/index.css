@@ -3126,3 +3126,34 @@ body {
 .app--waiting .page-enter * {
   animation-play-state: paused !important;
 }
+
+/* phones: the announcement line is too long for one row, so it splits cleanly:
+   ✦ ANNOUNCEMENT ON 20TH OCTOBER ✦  /  5:30 PM  (dots stay on the first row) */
+.hero__announce-time {
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .hero__date:not(.hero__date--fest) {
+    position: relative;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: clamp(0.8rem, 4.2vw, 1rem);
+    line-height: 1.5;
+    text-align: center;
+  }
+  .hero__date:not(.hero__date--fest) .dot {
+    align-self: flex-start;
+    line-height: 1.9;
+    font-size: 0.7rem;
+  }
+  .hero__announce {
+    white-space: nowrap;
+  }
+  .hero__announce-sep {
+    display: none;
+  }
+  .hero__announce-time {
+    display: block;
+  }
+}

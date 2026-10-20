@@ -88,7 +88,10 @@ export default function Home() {
               <>
                 <p className="hero__date anim-rise anim-d2" key="announce">
                   <span className="dot">✦</span>
-                  <span>Announcement on 20th October – 5:30 PM</span>
+                  <span className="hero__announce">
+                    Announcement on 20th October<span className="hero__announce-sep"> – </span>
+                    <span className="hero__announce-time">5:30 PM</span>
+                  </span>
                   <span className="dot">✦</span>
                 </p>
                 <div className="anim-rise anim-d3">
