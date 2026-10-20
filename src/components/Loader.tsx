@@ -15,7 +15,9 @@ const TAGLINE_AT = [0, 0.75, 1.25, 1.7];
 /* each word hits the screen this long after it starts (matches tlSlam's impact frame) */
 const TAGLINE_HIT = 0.43;
 
-export default function Loader({ onDone }: { onDone: () => void }) {
+export default function Loader({ onDone, onExit }: { onDone: () => void; onExit?: () => void }) {
+  const onExitRef = useRef(onExit);
+  onExitRef.current = onExit;
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wordRef = useRef<HTMLDivElement>(null);
@@ -30,13 +32,37 @@ export default function Loader({ onDone }: { onDone: () => void }) {
     let disposed = false;
     let scene: IntroSceneType | null = null;
     let finished = false;
+    let exited = false;
+    /* the exit fade has begun: let the home page start its entrance animations underneath */
+    const exitStarted = () => {
+      if (exited) return;
+      exited = true;
+      onExitRef.current?.();
+    };
+    let running = false; // the frame clock has started
+    let skipRequested = false;
 
     const finish = () => {
       if (finished) return;
       finished = true;
+      exitStarted();
       document.body.style.overflow = '';
       onDone();
     };
+
+    /* tap / click anywhere (or Enter, Space, Esc) skips straight to the exit fade */
+    const skip = () => {
+      if (finished || skipRequested) return;
+      skipRequested = true;
+      rootRef.current?.classList.add('is-skipped');
+      if (!running) finish(); // clock not started yet: nothing to fade, just leave
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') skip();
+    };
+    const root0 = rootRef.current;
+    root0?.addEventListener('pointerdown', skip);
+    window.addEventListener('keydown', onKey);
 
     const run = async () => {
       let WORDS_LIST: string[] = [];
@@ -79,9 +105,11 @@ export default function Loader({ onDone }: { onDone: () => void }) {
       let last = -1;
       let curWord: string | null = null;
       const lastWord = WORDS_LIST[WORDS_LIST.length - 1];
+      running = true;
       const frame = (now: number) => {
         if (last >= 0) elapsed += Math.min(Math.max(0, (now - last) / 1000), 1 / 20);
         last = now;
+        if (skipRequested && elapsed < T.exit) elapsed = T.exit;
         let t = reduced ? T.exit - 0.6 + Math.min(elapsed, 1.4) : elapsed;
 
         if (!Number.isNaN(freeze)) t = freeze;
@@ -146,6 +174,7 @@ export default function Loader({ onDone }: { onDone: () => void }) {
         }
         if (flashRef.current) flashRef.current.style.opacity = (scene?.flash ?? 0).toFixed(3);
 
+        if (t >= T.exit && Number.isNaN(freeze)) exitStarted();
         if (t >= T.end && Number.isNaN(freeze)) {
           window.removeEventListener('resize', onResize);
           finish();
@@ -160,13 +189,15 @@ export default function Loader({ onDone }: { onDone: () => void }) {
     return () => {
       disposed = true;
       cancelAnimationFrame(raf);
+      root0?.removeEventListener('pointerdown', skip);
+      window.removeEventListener('keydown', onKey);
       scene?.dispose();
       document.body.style.overflow = '';
     };
   }, [onDone]);
 
   return (
-    <div className={`intro3d ${fallback ? 'intro3d--fallback' : ''}`} ref={rootRef} data-phase="tiles" aria-label="Surabhi 2027 intro">
+    <div className={`intro3d ${fallback ? 'intro3d--fallback' : ''}`} ref={rootRef} data-phase="tiles" aria-label="Surabhi 2027 intro. Tap anywhere to skip.">
       <div className="intro3d__bg" />
       <div className="intro3d__rays" />
       <canvas ref={canvasRef} className="intro3d__canvas" />
@@ -189,7 +220,7 @@ export default function Loader({ onDone }: { onDone: () => void }) {
         </div>
       </div>
 
-
+      <p className="intro3d__skip" aria-hidden="true">Tap anywhere to skip</p>
     </div>
   );
 }

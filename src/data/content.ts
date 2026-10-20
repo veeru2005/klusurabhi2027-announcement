@@ -1,9 +1,12 @@
 export const REGISTER_URL = 'https://klusurabhi.in/';
 export const INSTAGRAM_URL = 'https://www.instagram.com/klsurabhi/';
-/** Fest start: 12 March 2027, 09:00 IST */
-export const FEST_START = new Date('2027-03-12T09:00:00+05:30');
-/** Big announcement: the home-page countdown runs to this moment. */
-export const ANNOUNCE_AT = new Date('2026-10-20T00:00:00+05:30');
+/** Fest start: 8 March 2027, 09:00 IST */
+export const FEST_START = new Date('2027-03-08T09:00:00+05:30');
+/** Big announcement: 20 October 2026, 5:30 PM IST. Until then the home page counts down to it;
+    from this moment the fest dates appear in place of the countdown. */
+export const ANNOUNCE_AT = new Date('2026-10-20T17:30:00+05:30');
+/** Shown on the home page once ANNOUNCE_AT has passed. */
+export const FEST_DATES = '8th – 13th March 2027';
 
 export interface FestEvent {
   icon: string;

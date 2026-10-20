@@ -2,6 +2,8 @@ import { useLayoutEffect, useRef } from 'react';
 import Countdown from '../components/Countdown';
 import Petals from '../components/Petals';
 import { useParallax } from '../hooks/useParallax';
+import { useNow } from '../hooks/useNow';
+import { ANNOUNCE_AT, FEST_DATES } from '../data/content';
 
 const SUB_TEXT = 'International Cultural Fest 2027';
 const SUB_LETTERS = SUB_TEXT.split('');
@@ -11,6 +13,9 @@ export default function Home() {
   const mandala = useParallax<HTMLDivElement>(0.25);
   const heroRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const now = useNow();
+  /* after 20 Oct 2026, 5:30 PM IST the fest dates replace the announcement line */
+  const revealed = now >= ANNOUNCE_AT.getTime();
 
   /* one screen, no scrolling: if the content is taller than the space between the
      badge and the credit line (short phones, landscape, small laptops), shrink it to fit */
@@ -71,14 +76,26 @@ export default function Home() {
                 ))}
               </p>
             </div>
-            <p className="hero__date anim-rise anim-d2">
-              <span className="dot">✦</span>
-              <span>Announcement on 20th October</span>
-              <span className="dot">✦</span>
-            </p>
-            <div className="anim-rise anim-d3">
-              <Countdown />
-            </div>
+            {/* before 20 Oct, 5:30 PM IST: announcement line + countdown.
+                after it: the fest dates, big, with no countdown */}
+            {revealed ? (
+              <p className="hero__date hero__date--fest anim-rise anim-d2" key="dates" aria-label={`Surabhi 2027: ${FEST_DATES}`}>
+                <span className="dot">✦</span>
+                <span className="hero__fest-dates">{FEST_DATES}</span>
+                <span className="dot">✦</span>
+              </p>
+            ) : (
+              <>
+                <p className="hero__date anim-rise anim-d2" key="announce">
+                  <span className="dot">✦</span>
+                  <span>Announcement on 20th October – 5:30 PM</span>
+                  <span className="dot">✦</span>
+                </p>
+                <div className="anim-rise anim-d3">
+                  <Countdown target={ANNOUNCE_AT} now={now} label="Countdown to the Surabhi 2027 announcement on 20 October, 5:30 PM" />
+                </div>
+              </>
+            )}
             {/* phones show the kicker under the buttons instead of over the logo */}
             <p className="hero__kicker hero__kicker--foot anim-rise anim-d4">KL University · KL SAC</p>
           </div>

@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
-import { ANNOUNCE_AT } from '../data/content';
+interface Props {
+  target: Date;
+  now: number;
+  label: string;
+}
 
-function diff() {
-  const ms = Math.max(0, ANNOUNCE_AT.getTime() - Date.now());
+function diff(target: Date, now: number) {
+  const ms = Math.max(0, target.getTime() - now);
   return {
     Days: Math.floor(ms / 86_400_000),
     Hours: Math.floor((ms / 3_600_000) % 24),
@@ -11,19 +14,14 @@ function diff() {
   };
 }
 
-export default function Countdown() {
-  const [t, setT] = useState(diff);
-  useEffect(() => {
-    const id = setInterval(() => setT(diff()), 1000);
-    return () => clearInterval(id);
-  }, []);
-
+export default function Countdown({ target, now, label }: Props) {
+  const t = diff(target, now);
   return (
-    <div className="countdown" role="timer" aria-label="Countdown to the Surabhi 2027 announcement on 20 October">
-      {Object.entries(t).map(([label, value]) => (
-        <div className="countdown__box" key={label}>
+    <div className="countdown" role="timer" aria-label={label}>
+      {Object.entries(t).map(([name, value]) => (
+        <div className="countdown__box" key={name}>
           <span className="countdown__num">{String(value).padStart(2, '0')}</span>
-          <span className="countdown__label">{label}</span>
+          <span className="countdown__label">{name}</span>
         </div>
       ))}
     </div>

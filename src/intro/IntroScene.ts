@@ -472,8 +472,9 @@ export class IntroScene {
     this.mascotScale = 1;
     this.mascotSideX = 0;
     const sideVisH = this.visH * ((this.baseZ + 1.2) / this.baseZ);
-    this.mascotSideY = phone ? 0.1 - sideVisH * 0.5 + 0.95 : 0.1 - sideVisH * 0.5 + sideVisH * 0.03;
-    this.mascotAsideShrink = phone ? 0.48 : 0.37;
+    // feet sit a little higher and the mascot is smaller, so he clears the 'Tap anywhere to skip' line
+    this.mascotSideY = phone ? 0.1 - sideVisH * 0.5 + 1.35 : 0.1 - sideVisH * 0.5 + sideVisH * 0.095;
+    this.mascotAsideShrink = phone ? 0.56 : 0.5;
     // desktop: big card a touch smaller and lower so it clears 'KL University presents';
     // the orbit of small cards rides higher, away from the word
     this.cardLift = phone ? 0.53 : 0.6;

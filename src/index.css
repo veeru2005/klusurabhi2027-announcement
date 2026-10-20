@@ -3087,3 +3087,42 @@ body {
     padding-top: 74px;
   }
 }
+/* revealed fest dates (after 20 Oct 2026, 5:30 PM IST): big gold lockup, replaces the countdown */
+.hero__date--fest {
+  gap: 0.4rem 1rem;
+  margin: 0.4rem 0 0.6rem;
+  flex-wrap: nowrap;
+}
+.hero__date--fest .hero__fest-dates {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.5vw, 2.4rem);
+  line-height: 1.15;
+  letter-spacing: 0;
+  white-space: nowrap;
+  /* same amber gold as the "&" in the intro's BIGGER & BETTER!, with its raised edge */
+  background: linear-gradient(180deg, #ffe7a8 0%, #e7a83b 60%, #b56d1e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 #a87a32) drop-shadow(0 1px 0 #8b6024) drop-shadow(0 1px 0 #6a4718)
+    drop-shadow(0 6px 8px rgba(0, 0, 0, 0.5));
+}
+.hero__date--fest .dot {
+  font-size: clamp(0.9rem, 1.4vw, 1.3rem);
+}
+@media (max-width: 600px) {
+  .hero__date--fest {
+    gap: 0.4rem 0.5rem;
+    justify-content: center;
+  }
+  .hero__date--fest .hero__fest-dates {
+    font-size: clamp(1.1rem, 5.2vw, 1.6rem);
+  }
+}
+
+/* while the intro plays on top, hold every home-page entrance animation at its first frame;
+   they start together as the intro begins to fade out */
+.app--waiting .page-enter,
+.app--waiting .page-enter * {
+  animation-play-state: paused !important;
+}

@@ -341,3 +341,42 @@
     font-size: 0.7em;
   }
 }
+/* ---------- tap anywhere to skip ---------- */
+.intro3d {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.intro3d__skip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(clamp(16px, 4vh, 34px) + env(safe-area-inset-bottom, 0px));
+  margin: 0;
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+/* fades in once a moment after the intro starts, then stays solid white (no blinking) */
+.intro3d.is-started .intro3d__skip {
+  animation: skipIn 0.8s 1.2s ease forwards;
+}
+@keyframes skipIn {
+  to {
+    opacity: 1;
+  }
+}
+/* after a skip: words and tagline vanish at once while the scene fades out */
+.intro3d.is-skipped .intro3d__word,
+.intro3d.is-skipped .intro3d__tagline,
+.intro3d.is-skipped .intro3d__skip {
+  visibility: hidden !important;
+  animation: none !important;
+}
+.intro3d.is-skipped {
+  cursor: default;
+}
