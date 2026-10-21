@@ -3,7 +3,7 @@ import Countdown from '../components/Countdown';
 import Petals from '../components/Petals';
 import { useParallax } from '../hooks/useParallax';
 import { useNow } from '../hooks/useNow';
-import { ANNOUNCE_AT, FEST_DATES } from '../data/content';
+import { ANNOUNCE_AT, FEST_DATES, NEXT_ANNOUNCEMENT } from '../data/content';
 
 const SUB_TEXT = 'International Cultural Fest 2027';
 const SUB_LETTERS = SUB_TEXT.split('');
@@ -79,11 +79,14 @@ export default function Home() {
             {/* before 20 Oct, 5:30 PM IST: announcement line + countdown.
                 after it: the fest dates, big, with no countdown */}
             {revealed ? (
+              <div className="hero__reveal" key="reveal">
               <p className="hero__date hero__date--fest anim-rise anim-d2" key="dates" aria-label={`Surabhi 2027: ${FEST_DATES}`}>
                 <span className="dot">✦</span>
                 <span className="hero__fest-dates">{FEST_DATES}</span>
                 <span className="dot">✦</span>
               </p>
+              <p className="hero__next anim-rise anim-d3"><span className="hero__next-text">{NEXT_ANNOUNCEMENT}</span></p>
+              </div>
             ) : (
               <>
                 <p className="hero__date anim-rise anim-d2" key="announce">

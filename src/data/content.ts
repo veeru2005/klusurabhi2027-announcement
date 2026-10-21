@@ -6,6 +6,8 @@ export const FEST_START = new Date('2027-03-08T09:00:00+05:30');
     from this moment the fest dates appear in place of the countdown. */
 export const ANNOUNCE_AT = new Date('2026-10-20T17:30:00+05:30');
 /** Shown on the home page once ANNOUNCE_AT has passed. */
+/** Shown under the fest dates. */
+export const NEXT_ANNOUNCEMENT = 'Next Announcement on 31st Oct';
 export const FEST_DATES = '8th – 13th March 2027';
 
 export interface FestEvent {
